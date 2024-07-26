@@ -1,10 +1,12 @@
 ﻿using Gestionnaire_Contact.Data;
 using Gestionnaire_Contact.Models;
-using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
 namespace Gestionnaire_Contact.Repositories
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SexeRepository : IRepository<SexeModel, string>
     {
         private MySqlConnection _connection;
@@ -14,12 +16,9 @@ namespace Gestionnaire_Contact.Repositories
         }
         public void Add(SexeModel model)
         {
-            using (MySqlCommand command = new MySqlCommand("INSERT INTO Parcelle (no_parcelle, surface, nom_parcelle, coordonnees) VALUES (@no_parcelle, @surface, @nom_parcelle, @coordonnees);", _connection))
+            using (MySqlCommand command = new MySqlCommand("INSERT INTO Sexe (sexe) VALUES (@sexe);", _connection))
             {
-                command.Parameters.AddWithValue("@no_parcelle", entity.NoParcelle);
-                command.Parameters.AddWithValue("@surface", entity.Surface);
-                command.Parameters.AddWithValue("@nom_parcelle", entity.NomParcelle);
-                command.Parameters.AddWithValue("@coordonnees", entity.Coordonnees);
+                command.Parameters.AddWithValue("@sexe", model.Sexe);
                 try
                 {
                     _connection.Open();
@@ -27,7 +26,7 @@ namespace Gestionnaire_Contact.Repositories
                 }
                 catch (Exception exception)
                 {
-                    throw new RepositoryException($"Erreur lors de l'ajout de la parcelle.", nameof(ParcelleRepository), "Add", exception);
+                    Console.WriteLine($"{exception.Source} : {exception.Message}");
                 }
                 finally
                 {
@@ -36,23 +35,19 @@ namespace Gestionnaire_Contact.Repositories
             }
         }
 
-        public void Delete(SexeModel model)
+        public void Delete(string id)
         {
-            using (MySqlCommand command = new MySqlCommand("DELETE FROM Palette WHERE no_parcelle = @no_parcelle;", _connection))
+            using (MySqlCommand command = new MySqlCommand("DELETE FROM Palette WHERE sexe = @sexe;", _connection))
             {
                 try
                 {
                     _connection.Open();
-                    command.Parameters.AddWithValue("@no_parcelle", id);
-
-                    if (command.ExecuteNonQuery() == 0)
-                    {
-                        throw new Exception("L'unité a supprimer n'as pas pu être trouver.");
-                    }
+                    command.Parameters.AddWithValue("@sexe", id);
+                    command.ExecuteNonQuery();
                 }
                 catch (Exception exception)
                 {
-                    throw new RepositoryException($"Erreur lors de la suppression de la parcelle.", nameof(ParcelleRepository), "Delete", exception);
+                    Console.WriteLine($"{exception.Source} : {exception.Message}");
                 }
                 finally
                 {
@@ -84,7 +79,7 @@ namespace Gestionnaire_Contact.Repositories
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(exception);
+                    Console.WriteLine($"{exception.Source} : {exception.Message}");
                 }
                 finally
                 {
@@ -94,7 +89,7 @@ namespace Gestionnaire_Contact.Repositories
             return sexes;
         }
 
-        public SexeModel GetById(string id) // "M"
+        public SexeModel GetById(string id)
         {
             SexeModel sexe = new SexeModel { };
             using (MySqlCommand command = new MySqlCommand($"SELECT sexe FROM Sexe WHERE sexe = {id};", _connection))
@@ -115,40 +110,25 @@ namespace Gestionnaire_Contact.Repositories
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine($"{exception.Message}");
+                    Console.WriteLine($"{exception.Source} : {exception.Message}");
                 }
                 finally
                 {
                     _connection.Close();
                 }
             }
-            return sexe!;
+            return sexe;
         }
 
-        public void Update(SexeModel model)
+        public void Update(SexeModel model, string id)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            if (entity.NoParcelle == null)
-                throw new ArgumentNullException(nameof(entity));
-
             List<string> columnsToUpdate = new List<string>();
-            if (entity.NomParcelle == null)
-                columnsToUpdate.Add("nom_parcelle = @NomParcelle");
-            if (entity.Surface == null)
-                columnsToUpdate.Add("surface = @Surface");
-            if (entity.Coordonnees == null)
-                columnsToUpdate.Add("coordonnees = @Coordonnees");
+            columnsToUpdate.Add("sexe = @sexe");
 
-            using (MySqlCommand command = new MySqlCommand($"UPDATE Parcelle SET {string.Join(", ", columnsToUpdate)} WHERE no_parcelle=@NoParcelle);", _connection))
+            using (MySqlCommand command = new MySqlCommand($"UPDATE Parcelle SET {string.Join(", ", columnsToUpdate)} WHERE sexe = @id);", _connection))
             {
-                command.Parameters.AddWithValue("@NoParcelle", entity.NoParcelle);
-                if (entity.NomParcelle == null)
-                    command.Parameters.AddWithValue("@NomParcelle", entity.NomParcelle);
-                if (entity.Surface == null)
-                    command.Parameters.AddWithValue("@Surface", entity.Surface);
-                if (entity.Coordonnees == null)
-                    command.Parameters.AddWithValue("@Noordonnees", entity.Coordonnees);
+                command.Parameters.AddWithValue("@sexe", model.Sexe);
+                command.Parameters.AddWithValue("@id", id);
                 try
                 {
                     _connection.Open();
@@ -156,7 +136,7 @@ namespace Gestionnaire_Contact.Repositories
                 }
                 catch (Exception exception)
                 {
-                    throw new RepositoryException($"Erreur lors de la mise à jour partiel de la parcelle.", nameof(ParcelleRepository), "UpdatePartial", exception);
+                    Console.WriteLine($"{exception.Source} : {exception.Message}");
                 }
                 finally
                 {
