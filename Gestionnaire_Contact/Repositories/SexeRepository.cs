@@ -37,7 +37,7 @@ namespace Gestionnaire_Contact.Repositories
 
         public void Delete(string id)
         {
-            using (MySqlCommand command = new MySqlCommand("DELETE FROM Palette WHERE sexe = @sexe;", _connection))
+            using (MySqlCommand command = new MySqlCommand("DELETE FROM Sexe WHERE sexe = @sexe;", _connection))
             {
                 try
                 {
@@ -92,7 +92,7 @@ namespace Gestionnaire_Contact.Repositories
         public SexeModel GetById(string id)
         {
             SexeModel sexe = new SexeModel { };
-            using (MySqlCommand command = new MySqlCommand($"SELECT sexe FROM Sexe WHERE sexe = {id};", _connection))
+            using (MySqlCommand command = new MySqlCommand($"SELECT sexe FROM Sexe WHERE sexe = @sexe;", _connection))
             {
                 try
                 {
@@ -125,7 +125,7 @@ namespace Gestionnaire_Contact.Repositories
             List<string> columnsToUpdate = new List<string>();
             columnsToUpdate.Add("sexe = @sexe");
 
-            using (MySqlCommand command = new MySqlCommand($"UPDATE Parcelle SET {string.Join(", ", columnsToUpdate)} WHERE sexe = @id);", _connection))
+            using (MySqlCommand command = new MySqlCommand($"UPDATE Sexe SET {string.Join(", ", columnsToUpdate)} WHERE sexe = @id);", _connection))
             {
                 command.Parameters.AddWithValue("@sexe", model.Sexe);
                 command.Parameters.AddWithValue("@id", id);
