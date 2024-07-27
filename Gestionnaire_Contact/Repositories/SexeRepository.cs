@@ -14,6 +14,7 @@ namespace Gestionnaire_Contact.Repositories
         {
             _connection = Database.GetDataBase().Connection;
         }
+
         public void Add(SexeModel model)
         {
             using (MySqlCommand command = new MySqlCommand("INSERT INTO Sexe (sexe) VALUES (@sexe);", _connection))

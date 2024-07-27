@@ -1,6 +1,5 @@
 ﻿using Gestionnaire_Contact.Models;
 using Gestionnaire_Contact.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gestionnaire_Contact.Controllers

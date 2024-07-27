@@ -8,7 +8,7 @@ namespace Gestionnaire_Contact.Data
         private MySqlConnection _connection; 
         public MySqlConnection Connection { get { return _connection; } }
         private Database() { 
-            _connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=;database=gestionnaire_contact");
+            _connection = new MySqlConnection("server=127.0.0.1;uid=root;pwd=;database=gestionnaire_contact"); // Ma clé de connection
         }
         public static Database GetDataBase()
         {
