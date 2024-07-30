@@ -1,34 +1,38 @@
 ﻿using Gestionnaire_Contact.Data;
 using Gestionnaire_Contact.Models;
-using MySql.Data.MySqlClient;
 
 namespace Gestionnaire_Contact.Repositories
 {
     public class ContactRepository : IRepository<ContactModel, string>
     {
-        private MySqlConnection _connection;
-        public ContactRepository()
+        private GestionDbContext _context;
+        public ContactRepository(GestionDbContext context)
         {
-            _connection = Database.GetDataBase().Connection; // key connection
+            _context = context;
         }
         public void Add(ContactModel model)
         {
-            _connection.Open();                     // Je me connecte
-                                                    // Je 
+            _context.Contact.Add(model);
+            _context.SaveChanges();
         }
-        public void Update(ContactModel model, string id)
-        { 
-        }
-        public void Delete(string id) 
+        public void Update(ContactModel model)
         {
+            _context.Update(model);
+            _context.SaveChanges();
+        }
+        public void Delete(string fullname) 
+        {
+             ContactModel entity = _context.Contact.Find(fullname);
+             _context.Contact.Remove(entity);
+             _context.SaveChanges();
         }
         public IEnumerable<ContactModel> GetAll() 
         {
-            return null;
+            return _context.Contact;
         }
-        public ContactModel GetById(string id) 
+        public ContactModel GetById(string fullname) 
         { 
-            return null;
+            return _context.Contact.Find(fullname);
         }
     }
 }

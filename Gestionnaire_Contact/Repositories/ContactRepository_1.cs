@@ -7,10 +7,10 @@ namespace Gestionnaire_Contact.Repositories
     /// <summary>
     /// 
     /// </summary>
-    public class SexeRepository : IRepository<SexeModel, string>
+    public class ContactRepository1 : IRepository<SexeModel, string>
     {
         private MySqlConnection _connection;
-        public SexeRepository()
+        public ContactRepository1()
         {
             _connection = Database.GetDataBase().Connection;
         }
@@ -121,7 +121,7 @@ namespace Gestionnaire_Contact.Repositories
             return sexe;
         }
 
-        public void Update(SexeModel model, string id)
+        public void Update(SexeModel model)
         {
             List<string> columnsToUpdate = new List<string>();
             columnsToUpdate.Add("sexe = @sexe");
@@ -129,7 +129,7 @@ namespace Gestionnaire_Contact.Repositories
             using (MySqlCommand command = new MySqlCommand($"UPDATE Sexe SET {string.Join(", ", columnsToUpdate)} WHERE sexe = @id);", _connection))
             {
                 command.Parameters.AddWithValue("@sexe", model.Sexe);
-                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@id", model.Sexe);
                 try
                 {
                     _connection.Open();

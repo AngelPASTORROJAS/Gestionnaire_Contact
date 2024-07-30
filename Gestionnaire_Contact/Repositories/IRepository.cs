@@ -18,7 +18,7 @@
         T GetById(TKey id);         // Read by id
         IEnumerable<T> GetAll();    // Read all
         void Add(T model);           // Create
-        void Update(T model, TKey id);        // Update
+        void Update(T model);        // Update
         void Delete(TKey id);        // Delete
     }
 }
